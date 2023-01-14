@@ -16,8 +16,7 @@ public class LottieActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_lottie);
 
-        LottieAnimationView lottieAnimationView = findViewById(R.id.Lottie_ANIM_lottie);
-        //load data from FB
+        LottieAnimationView lottieAnimationView = findViewById(R.id.Lottie_ANIM);
         lottieAnimationView.resumeAnimation();
         new Handler().postDelayed(() -> {
             Intent intent = new Intent(getApplicationContext(),LoginActivity.class);
