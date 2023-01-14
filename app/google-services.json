@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "892701241968",
+    "project_id": "soccerwager-36290",
+    "storage_bucket": "soccerwager-36290.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:892701241968:android:4cf11e6debbfb2dcd4fab5",
+        "android_client_info": {
+          "package_name": "com.amitb.a23a_10357_soccerwager"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "892701241968-f75a0821eu38gq8glujdsl6m5nm3dvdu.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBFEbbUu2tMJN1pK5tnysDcNDE57Gdy80U"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "892701241968-f75a0821eu38gq8glujdsl6m5nm3dvdu.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
