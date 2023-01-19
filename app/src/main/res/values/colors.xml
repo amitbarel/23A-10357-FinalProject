@@ -14,4 +14,5 @@
     <color name="white">#FFFFFFFF</color>
     <color name="blue_A700">#304FFE</color>
     <color name="navy_A700">#1B2350</color>
+    <color name="appBack">#272939</color>
 </resources>
