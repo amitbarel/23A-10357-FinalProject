@@ -1,20 +1,51 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/blue_300"
     tools:context=".Fragments.ProfileFragment">
 
+    <ImageView
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:layout_centerHorizontal="true"
+        android:layout_above="@id/TXT_name"
+        android:src="@drawable/round_profile"/>
 
     <TextView
+        android:id="@+id/TXT_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Profile"
+        android:text="Name"
+        android:layout_above="@id/TXT_email"
         android:textSize="30sp"
         android:fontFamily="@font/lilita_one"
-        android:layout_centerInParent="true"
+        android:layout_centerHorizontal="true"
         android:textColor="@color/white"/>
+
+    <TextView
+        android:id="@+id/TXT_email"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Email"
+        android:layout_above="@id/logout_BTN"
+        android:textSize="30sp"
+        android:fontFamily="@font/lilita_one"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="75dp"
+        android:textColor="@color/white"/>
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/logout_BTN"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:text="Log Out"
+        android:backgroundTint="@color/blue_A700"
+        android:textColor="@color/white"
+        android:textSize="20sp"
+        android:fontFamily="@font/lilita_one"/>
 
 </RelativeLayout>

@@ -25,99 +25,24 @@
             android:fontFamily="@font/lilita_one"
             android:text="FootballWager"/>
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/logout_BTN"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_marginHorizontal="12dp"
-            app:cornerRadius="8dp"
-            android:text="Log Out"
-            android:backgroundTint="@color/blue_A700"
-            android:textColor="@color/white"
-            android:textSize="12sp"
-            android:fontFamily="@font/lilita_one"
-            android:layout_alignParentEnd="true"/>
-
     </RelativeLayout>
-
-    <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/greetings_MSG"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/upper_deck"
-        android:layout_marginTop="8dp"
-        android:layout_marginHorizontal="12dp"
-        android:fontFamily="@font/lilita_one"
-        android:gravity="center_vertical"
-        android:text="Hello user"
-        android:textColor="@color/white"
-        android:textSize="22sp" />
 
 
     <FrameLayout
         android:id="@+id/fragments_frame"
-        android:layout_below="@id/greetings_MSG"
+        android:layout_below="@id/upper_deck"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginBottom="75dp"/>
+        android:layout_above="@id/bottom_navi"/>
 
-    <LinearLayout
-        android:id="@+id/buttonPanel"
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottom_navi"
         android:layout_width="match_parent"
-        android:layout_height="75dp"
-        android:layout_below="@id/fragments_frame"
-        android:layout_marginTop="-75dp"
-        android:layout_marginHorizontal="6dp"
-        android:orientation="horizontal">
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/BTN_games"
-            android:layout_width="0dp"
-            android:layout_height="50dp"
-            android:layout_gravity="center_vertical"
-            android:layout_weight="1"
-            android:backgroundTint="@color/blue_A700"
-            android:fontFamily="@font/lilita_one"
-            android:text="Current Games"
-            android:textColor="@color/white"
-            android:textSize="11sp"
-            app:cornerRadius="8dp" />
-
-        <View
-            android:layout_width="12dp"
-            android:layout_height="match_parent" />
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/BTN_leagues"
-            android:layout_width="0dp"
-            android:layout_height="50dp"
-            android:layout_gravity="center_vertical"
-            android:layout_weight="1"
-            android:backgroundTint="@color/blue_A700"
-            android:fontFamily="@font/lilita_one"
-            android:text="My leagues"
-            android:textColor="@color/white"
-            android:textSize="11sp"
-            app:cornerRadius="8dp" />
-
-        <View
-            android:layout_width="12dp"
-            android:layout_height="match_parent" />
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/BTN_profile"
-            android:layout_width="0dp"
-            android:layout_height="50dp"
-            android:layout_gravity="center_vertical"
-            android:layout_weight="1"
-            android:backgroundTint="@color/blue_A700"
-            android:fontFamily="@font/lilita_one"
-            android:text="My Profile"
-            android:textColor="@color/white"
-            android:textSize="11sp"
-            app:cornerRadius="8dp" />
-    </LinearLayout>
-
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        app:itemIconTint="@color/white"
+        app:itemTextColor="@color/white"
+        android:background="@color/ic_launcher_background"
+        app:menu="@menu/bottom_nvg"/>
 
 </RelativeLayout>

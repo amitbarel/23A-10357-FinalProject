@@ -10,7 +10,7 @@ import android.view.ViewGroup;
 
 import com.amitb.a23a_10357_soccerwager.R;
 
-public class LineupFragment extends Fragment {
+public class GamesFragment extends Fragment {
 
     private View view;
 
