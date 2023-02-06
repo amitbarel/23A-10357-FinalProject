@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/appBack">
+
+    <LinearLayout
+        android:id="@+id/item_layout"
+        android:layout_width="match_parent"
+        android:layout_height="85dp"
+        android:gravity="center"
+        android:background="@drawable/item_border">
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/TXT_team1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:fontFamily="@font/lilita_one"
+            android:minLines="1"
+            android:maxLines="2"
+            android:textSize="14dp"
+            android:textColor="@color/white"
+            android:layout_marginHorizontal="16dp"
+            android:text="Team1Name"/>
+
+        <EditText
+            android:id="@+id/ET_team1_score"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/lilita_one"
+            android:textSize="16dp"
+            android:textColor="@color/white"
+            android:layout_marginHorizontal="16dp"
+            android:layout_gravity="center"/>
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="VS."
+            android:fontFamily="@font/lilita_one"
+            android:textColor="@color/white"
+            android:layout_marginHorizontal="16dp"
+            android:textSize="30sp"
+            android:layout_gravity="center"/>
+
+        <EditText
+            android:id="@+id/ET_team2_score"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/lilita_one"
+            android:textSize="16dp"
+            android:textColor="@color/white"
+            android:layout_marginHorizontal="16dp"
+            android:layout_gravity="center"/>
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/TXT_team2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:minLines="1"
+            android:maxLines="2"
+            android:fontFamily="@font/lilita_one"
+            android:textSize="14dp"
+            android:textColor="@color/white"
+            android:layout_marginHorizontal="16dp"
+            android:text="Team2Name"/>
+
+    </LinearLayout>
+
+</RelativeLayout>

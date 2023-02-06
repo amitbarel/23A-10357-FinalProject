@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/purple_200"
+    android:background="@color/appBack"
     tools:context=".Fragments.HomeFragment">
 
     <com.google.android.material.textview.MaterialTextView
@@ -19,13 +19,72 @@
         android:textColor="@color/white"
         android:textSize="22sp" />
 
-    <TextView
+    <LinearLayout
+        android:id="@+id/base_layout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/title_home"
-        android:textSize="30sp"
-        android:fontFamily="@font/lilita_one"
         android:layout_centerInParent="true"
-        android:textColor="@color/white"/>
+        android:orientation="vertical">
+
+
+        <FrameLayout
+            android:id="@+id/score_layout"
+            android:layout_width="200dp"
+            android:layout_height="200dp"
+            android:padding="10dp"
+            android:background="@color/blue_A700"
+            android:layout_gravity="center_horizontal"
+            android:layout_above="@id/leagues_layout"
+            android:layout_marginBottom="30dp">
+
+            <TextView
+                android:id="@+id/upper_TXT"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Your score:"
+                android:textColor="@color/white"
+                android:fontFamily="@font/lilita_one"
+                android:layout_gravity="center_horizontal"
+                android:textSize="24dp"
+                android:layout_marginTop="16sp"/>
+
+            <TextView
+                android:id="@+id/points_TXT"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="0"
+                android:layout_marginTop="12dp"
+                android:textColor="@color/white"
+                android:fontFamily="@font/lilita_one"
+                android:layout_gravity="center"
+                android:textSize="85sp" />
+
+        </FrameLayout>
+
+        <FrameLayout
+            android:id="@+id/leagues_layout"
+            android:layout_width="400dp"
+            android:layout_height="400dp">
+
+            <TextView
+                android:id="@+id/leagues_header_TXT"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:fontFamily="@font/lilita_one"
+                android:text="Your leagues:"
+                android:textColor="@color/white"
+                android:textSize="30sp" />
+
+
+        </FrameLayout>
+
+
+    </LinearLayout>
+
+
+
+
+
 
 </RelativeLayout>
