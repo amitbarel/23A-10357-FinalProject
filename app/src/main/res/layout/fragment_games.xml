@@ -9,8 +9,21 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/games_recycle"
+        android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_marginBottom="80dp"
         tools:listitem="@layout/matchup_item"/>
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/BTN_send"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Send Guess"
+        android:backgroundTint="@color/blue_A700"
+        android:textColor="@color/white"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:layout_margin="15dp"/>
 
 </RelativeLayout>

@@ -1,8 +1,8 @@
 package com.amitb.a23a_10357_soccerwager.Utils;
 
 public class Match {
-    String team1;
-    String team2;
+    Team team1;
+    Team team2;
     int score1 = 0;
     int score2 = 0;
     String winner;
@@ -10,20 +10,20 @@ public class Match {
     public Match() {
     }
 
-    public String getTeam1() {
+    public Team getTeam1() {
         return team1;
     }
 
-    public Match setTeam1(String team1) {
+    public Match setTeam1(Team team1) {
         this.team1 = team1;
         return this;
     }
 
-    public String getTeam2() {
+    public Team getTeam2() {
         return team2;
     }
 
-    public Match setTeam2(String team2) {
+    public Match setTeam2(Team team2) {
         this.team2 = team2;
         return this;
     }
@@ -47,8 +47,13 @@ public class Match {
     }
 
     public String getWinner() {
-        String win = score1>score2? team1:team2;
-        return win ;
+        if (score1 > score2){
+            return team1.getName();
+        }
+        else if (score2 > score1){
+            return team2.getName();
+        }
+        else return "Tie";
     }
 
     public Match setWinner(String winner) {

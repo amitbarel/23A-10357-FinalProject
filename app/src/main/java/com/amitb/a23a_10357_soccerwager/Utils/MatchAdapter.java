@@ -1,5 +1,6 @@
 package com.amitb.a23a_10357_soccerwager.Utils;
 
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,35 +10,20 @@ import androidx.appcompat.widget.AppCompatTextView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.amitb.a23a_10357_soccerwager.R;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
-public class MatchAdapter {
+public class MatchAdapter extends RecyclerView.Adapter<MatchAdapter.MatchViewHolder> {
 
+    private Context context;
     private ArrayList<Match> fixtures;
     private FirebaseDatabase db = FirebaseDatabase.getInstance();
 
-    public void loadFixture(){
-        DatabaseReference ref = db.getReference("fixture");
-        ref.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                for (DataSnapshot match:snapshot.getChildren()) {
-                    fixtures.add(match.getValue(Match.class));
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });
-    };
+    public MatchAdapter(Context context,ArrayList<Match> fixtures) {
+        this.context = context;
+        this.fixtures = fixtures;
+    }
 
     public class MatchViewHolder extends RecyclerView.ViewHolder{
         private AppCompatTextView team1;
@@ -53,14 +39,17 @@ public class MatchAdapter {
     @NonNull
     public MatchViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.matchup_item,parent,false);
-        MatchViewHolder mvh = new MatchViewHolder(view);
-        return mvh;
+        return new MatchViewHolder(view);
     }
 
     public void onBindViewHolder(@NonNull MatchViewHolder holder, int position) {
         Match match = fixtures.get(position);
-        holder.team1.setText(match.getTeam1());
-        holder.team2.setText(match.getTeam2());
+        holder.team1.setText(match.getTeam1().getName());
+        holder.team2.setText(match.getTeam2().getName());
+    }
+
+    @Override
+    public int getItemCount() {return fixtures == null? 0: fixtures.size();
     }
 
 }

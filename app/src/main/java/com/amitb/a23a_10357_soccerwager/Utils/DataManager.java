@@ -20,6 +20,11 @@ public class DataManager {
     private static ArrayList<Match> fixture = new ArrayList<>();
     private static FirebaseDatabase db = FirebaseDatabase.getInstance();
 
+
+    public static ArrayList<Match> getFixture() {
+        return fixture;
+    }
+
     public static void loadTeams(){
         DatabaseReference teamsRef = db.getReference("teams");
         teamsRef.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -37,11 +42,28 @@ public class DataManager {
         });
     }
 
+    public static void loadFixture(){
+        DatabaseReference ref = db.getReference("fixture");
+        ref.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for (DataSnapshot match:snapshot.getChildren()) {
+                    fixture.add(match.getValue(Match.class));
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    };
+
     public static void createFixture(){
         ArrayList<Team> temp = teams;
         Collections.shuffle(temp);
         for (int i = 0; i < teams.size(); i+=2) {
-            Match m = new Match().setTeam1(temp.get(i).toString()).setTeam2(temp.get(i+1).toString());
+            Match m = new Match().setTeam1(temp.get(i)).setTeam2(temp.get(i+1));
             fixture.add(m);
         }
         writeData("fixture",fixture);
