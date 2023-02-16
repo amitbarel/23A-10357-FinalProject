@@ -5,7 +5,6 @@ public class Match {
     Team team2;
     int score1 = 0;
     int score2 = 0;
-    String winner;
 
     public Match() {
     }
@@ -46,20 +45,6 @@ public class Match {
         return this;
     }
 
-    public String getWinner() {
-        if (score1 > score2){
-            return team1.getName();
-        }
-        else if (score2 > score1){
-            return team2.getName();
-        }
-        else return "Tie";
-    }
-
-    public Match setWinner(String winner) {
-        this.winner = winner;
-        return this;
-    }
 }
 
 

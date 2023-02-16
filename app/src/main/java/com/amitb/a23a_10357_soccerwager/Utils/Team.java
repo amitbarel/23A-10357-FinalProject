@@ -24,12 +24,4 @@ public class Team {
         this.strength = strength;
         return this;
     }
-
-    @Override
-    public String toString() {
-        return "Team{" +
-                "name='" + name + '\'' +
-                ", strength=" + strength +
-                '}';
-    }
 }

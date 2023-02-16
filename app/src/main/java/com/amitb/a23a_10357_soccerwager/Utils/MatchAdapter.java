@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.widget.AppCompatEditText;
 import androidx.appcompat.widget.AppCompatTextView;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -28,13 +29,18 @@ public class MatchAdapter extends RecyclerView.Adapter<MatchAdapter.MatchViewHol
     public class MatchViewHolder extends RecyclerView.ViewHolder{
         private AppCompatTextView team1;
         private AppCompatTextView team2;
+        private AppCompatEditText score1;
+        private AppCompatEditText score2;
 
         public MatchViewHolder(@NonNull View itemView) {
             super(itemView);
             team1 = itemView.findViewById(R.id.TXT_team1);
             team2 = itemView.findViewById(R.id.TXT_team2);
+            score1 = itemView.findViewById(R.id.ET_team1_score);
+            score2 = itemView.findViewById(R.id.ET_team2_score);
         }
     }
+
 
     @NonNull
     public MatchViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {

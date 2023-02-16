@@ -1,7 +1,5 @@
 package com.amitb.a23a_10357_soccerwager.Utils;
 
-import android.util.Log;
-
 import androidx.annotation.NonNull;
 
 import com.google.firebase.database.DataSnapshot;
@@ -11,18 +9,36 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
 
 public class DataManager {
 
+    private final static int FIXTURE_SIZE = 7;
     private static ArrayList<Team> teams = new ArrayList<>();
-    private static ArrayList<Match> fixture = new ArrayList<>();
     private static FirebaseDatabase db = FirebaseDatabase.getInstance();
+    private static Fixture currentFixture = new Fixture();
+    private static String adminId;
 
 
-    public static ArrayList<Match> getFixture() {
-        return fixture;
+    public static Fixture getFixture() {
+        return currentFixture;
+    }
+
+    public static String getAdminId() {
+        DatabaseReference ref = db.getReference("admin");
+        ref.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                adminId = snapshot.getValue(String.class);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+        return adminId;
     }
 
     public static void loadTeams(){
@@ -47,9 +63,7 @@ public class DataManager {
         ref.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                for (DataSnapshot match:snapshot.getChildren()) {
-                    fixture.add(match.getValue(Match.class));
-                }
+                currentFixture = snapshot.getValue(Fixture.class);
             }
 
             @Override
@@ -64,13 +78,56 @@ public class DataManager {
         Collections.shuffle(temp);
         for (int i = 0; i < teams.size(); i+=2) {
             Match m = new Match().setTeam1(temp.get(i)).setTeam2(temp.get(i+1));
-            fixture.add(m);
+            currentFixture.getMatches().add(m);
         }
-        writeData("fixture",fixture);
+        DatabaseReference ref = db.getReference("fixture");
+        ref.setValue(currentFixture);
     }
 
-    private static void writeData(String path,Collection collection) {
-        DatabaseReference ref = db.getReference(path);
-        ref.setValue(collection);
+
+    public static void fillFixture() {
+        for (Match m:currentFixture.getMatches()) {
+            m.setScore1(randScore());
+            m.setScore2(randScore());
+        }
+    }
+
+    public static void givePoints() {
+        for (Guess g:currentFixture.getGuesses()){
+            DatabaseReference ref = db.getReference("users");
+            int points = 0;
+            for (int i = 0; i < FIXTURE_SIZE; i++) {
+                Match current = g.getFixtureScores().get(i);
+                points += calcPts(currentFixture.getMatches().get(i),current.getScore1(),current.getScore2());
+            }
+            int fixturePoints = points;
+            ref.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    HashMap<String,User> users = snapshot.getValue(HashMap.class);
+                    users.get(g.getUser()).incScore(fixturePoints);
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+
+                }
+            });
+        }
+    }
+
+    public static int randScore(){
+        int min = 0;
+        int max = 3;
+        return (int)(Math.random() * ((max-min)+1));
+    }
+
+    public static int calcPts(Match match, int s1, int s2){
+        if (match.getScore1() == s1 && match.getScore2() == s2)
+            return 3;
+        else if(s1>s2 && match.getScore1()> match.getScore2() || s1<s2 && match.getScore1()< match.getScore2()){
+            return 1;
+        }
+        return 0;
     }
 }
