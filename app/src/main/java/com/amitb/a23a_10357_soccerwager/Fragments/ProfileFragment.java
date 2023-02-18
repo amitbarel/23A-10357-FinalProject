@@ -8,17 +8,23 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.amitb.a23a_10357_soccerwager.Interfaces.CallBack_logout;
+import com.amitb.a23a_10357_soccerwager.Interfaces.OnGetDataListener;
 import com.amitb.a23a_10357_soccerwager.R;
 import com.amitb.a23a_10357_soccerwager.Utils.DataManager;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 public class ProfileFragment extends Fragment {
 
     private FirebaseAuth mAuth;
+    private LinearLayout genFrame;
     private View view;
     private TextView name,email;
     private AppCompatButton logout,generateNewFixture;
@@ -36,7 +42,29 @@ public class ProfileFragment extends Fragment {
         findViews();
         name.setText(mAuth.getCurrentUser().getDisplayName());
         email.setText(mAuth.getCurrentUser().getEmail());
+        String uid = mAuth.getCurrentUser().getUid();
+        Log.d("onCreateView: ",uid);
         logout.setOnClickListener(v->btnClicked());
+        DataManager.readData(FirebaseDatabase.getInstance().getReference("admin"), new OnGetDataListener() {
+            @Override
+            public void onSuccess(DataSnapshot dataSnapshot) {
+                Log.d("Answer","checking");
+                if (DataManager.isAdmin(dataSnapshot,uid)){
+                    Log.d("Answer","is admin");
+                    genFrame.setVisibility(View.VISIBLE);
+                }
+            }
+
+            @Override
+            public void onStart() {
+                Log.d("onStart: ","started");
+            }
+
+            @Override
+            public void onFailure() {
+
+            }
+        });
         generateNewFixture.setOnClickListener(v->generateFixture());
         return view;
     }
@@ -65,6 +93,7 @@ public class ProfileFragment extends Fragment {
         name = view.findViewById(R.id.TXT_name);
         email = view.findViewById(R.id.TXT_email);
         logout = view.findViewById(R.id.logout_BTN);
+        genFrame = view.findViewById(R.id.frame_generate);
         generateNewFixture = view.findViewById(R.id.BTN_generate);
     }
 }

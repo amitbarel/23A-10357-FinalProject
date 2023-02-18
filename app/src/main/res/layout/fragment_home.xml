@@ -21,9 +21,11 @@
 
     <LinearLayout
         android:id="@+id/base_layout"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_below="@id/greetings_MSG"
         android:layout_centerInParent="true"
+        android:layout_marginTop="30dp"
         android:orientation="vertical">
 
 
@@ -31,40 +33,40 @@
             android:id="@+id/score_layout"
             android:layout_width="200dp"
             android:layout_height="200dp"
-            android:padding="10dp"
-            android:background="@color/blue_A700"
-            android:layout_gravity="center_horizontal"
             android:layout_above="@id/leagues_layout"
-            android:layout_marginBottom="30dp">
+            android:layout_gravity="center_horizontal"
+            android:layout_marginBottom="30dp"
+            android:background="@color/blue_A700"
+            android:padding="10dp">
 
             <TextView
                 android:id="@+id/upper_TXT"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="16sp"
+                android:fontFamily="@font/lilita_one"
                 android:text="Your score:"
                 android:textColor="@color/white"
-                android:fontFamily="@font/lilita_one"
-                android:layout_gravity="center_horizontal"
-                android:textSize="24dp"
-                android:layout_marginTop="16sp"/>
+                android:textSize="24dp" />
 
             <TextView
                 android:id="@+id/points_TXT"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="0"
-                android:layout_marginTop="12dp"
-                android:textColor="@color/white"
-                android:fontFamily="@font/lilita_one"
                 android:layout_gravity="center"
+                android:layout_marginTop="12dp"
+                android:fontFamily="@font/lilita_one"
+                android:text="0"
+                android:textColor="@color/white"
                 android:textSize="85sp" />
 
         </FrameLayout>
 
         <FrameLayout
             android:id="@+id/leagues_layout"
-            android:layout_width="400dp"
-            android:layout_height="370dp">
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
             <TextView
                 android:id="@+id/leagues_header_TXT"
@@ -81,18 +83,18 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/leagues_header_TXT"
-                android:layout_marginTop="40dp"
                 android:layout_marginHorizontal="30dp"
+                android:layout_marginTop="40dp"
                 android:background="@color/blue_A700">
 
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="3"
-                    android:textColor="@color/white"
                     android:background="@drawable/item_border"
                     android:gravity="center"
-                    android:text="League Name"/>
+                    android:text="League Name"
+                    android:textColor="@color/white" />
 
 
                 <TextView
@@ -100,58 +102,58 @@
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:background="@drawable/item_border"
-                    android:textColor="@color/white"
                     android:gravity="center"
-                    android:text="Place"/>
+                    android:text="Place"
+                    android:textColor="@color/white" />
 
             </LinearLayout>
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/table_leagues"
                 android:layout_width="match_parent"
+                android:layout_height="220dp"
                 android:layout_below="@id/table_header"
+                android:layout_marginHorizontal="30dp"
                 android:layout_marginTop="59dp"
-                android:layout_height="300dp"
-                tools:listitem="@layout/ranking_item"
-                android:layout_marginHorizontal="30dp"/>
+                tools:listitem="@layout/ranking_item" />
 
         </FrameLayout>
 
         <LinearLayout
-            android:orientation="vertical"
-            android:layout_marginHorizontal="30dp"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="30dp"
+            android:layout_marginBottom="40dp"
+            android:orientation="vertical">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:text="Create a league"
                 android:fontFamily="@font/lilita_one"
+                android:text="Create a league"
                 android:textColor="@color/white"
-                android:textSize="22sp"/>
+                android:textSize="22sp" />
 
             <androidx.appcompat.widget.AppCompatEditText
                 android:id="@+id/ET_league"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
+                android:inputType="textPassword"
+                android:layout_height="wrap_content" />
 
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/BTN_create"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Create"
+                android:layout_gravity="center"
+                android:backgroundTint="@color/blue_A700"
                 android:enabled="true"
                 android:fontFamily="@font/lilita_one"
-                android:layout_gravity="center"
-                android:textColor="@color/white"
-                android:backgroundTint="@color/blue_A700"/>
-
+                android:text="Create"
+                android:textColor="@color/white" />
 
 
         </LinearLayout>
-
 
 
     </LinearLayout>

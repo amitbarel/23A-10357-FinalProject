@@ -3,8 +3,8 @@ package com.amitb.a23a_10357_soccerwager.Utils;
 import java.util.ArrayList;
 
 public class Fixture {
-    ArrayList<Guess> guesses = new ArrayList<>();
-    ArrayList<Match> matches = new ArrayList<>();
+    ArrayList<Guess> guesses;
+    ArrayList<Match> matches;
 
     public Fixture() {
     }
@@ -26,4 +26,6 @@ public class Fixture {
         this.matches = matches;
         return this;
     }
+
+
 }

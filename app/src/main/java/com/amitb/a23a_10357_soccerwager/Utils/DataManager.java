@@ -1,23 +1,28 @@
 package com.amitb.a23a_10357_soccerwager.Utils;
 
+import android.util.Log;
+
 import androidx.annotation.NonNull;
 
+import com.amitb.a23a_10357_soccerwager.Interfaces.OnGetDataListener;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.GenericTypeIndicator;
 import com.google.firebase.database.ValueEventListener;
 
+import java.lang.ref.Reference;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
 
 public class DataManager {
 
     private final static int FIXTURE_SIZE = 7;
     private static ArrayList<Team> teams = new ArrayList<>();
     private static FirebaseDatabase db = FirebaseDatabase.getInstance();
-    private static Fixture currentFixture = new Fixture();
+    private static Fixture currentFixture;
     private static String adminId;
 
 
@@ -25,20 +30,30 @@ public class DataManager {
         return currentFixture;
     }
 
-    public static String getAdminId() {
-        DatabaseReference ref = db.getReference("admin");
+    public static void readData(DatabaseReference ref, final OnGetDataListener listener) {
+        listener.onStart();
         ref.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                adminId = snapshot.getValue(String.class);
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                listener.onSuccess(dataSnapshot);
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-
+                listener.onFailure();
             }
         });
-        return adminId;
+
+    }
+
+    public static Boolean isAdmin(DataSnapshot snapshot, String uid) {
+        final String[] retValue = new String[1];
+        adminId = snapshot.getValue(String.class);
+        retValue[0] = adminId.substring(1);
+        if (uid.equals(retValue[0])){
+            return true;
+        }
+        return false;
     }
 
     public static void loadTeams(){
@@ -58,19 +73,16 @@ public class DataManager {
         });
     }
 
-    public static void loadFixture(){
-        DatabaseReference ref = db.getReference("fixture");
-        ref.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                currentFixture = snapshot.getValue(Fixture.class);
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });
+    public static void loadFixture(DataSnapshot snapshot){
+        Log.d("loadFixture: ",snapshot.getKey());
+//        GenericTypeIndicator<ArrayList<Guess>> t1 = new GenericTypeIndicator<ArrayList<Guess>>() {};
+//        ArrayList<Guess> guesses = snapshot.child("guesses").getValue(t1);
+//        GenericTypeIndicator<ArrayList<Match>> t2 = new GenericTypeIndicator<ArrayList<Match>>() {};
+//        ArrayList<Match> matches = snapshot.child("matches").getValue(t2);
+//        currentFixture = new Fixture().setGuesses(guesses).setMatches(matches);
+//        currentFixture = snapshot.getValue(Fixture.class);
+        currentFixture = snapshot.getValue(Fixture.class);
+        Log.d("loadFixture: ",currentFixture.toString());
     };
 
     public static void createFixture(){
@@ -92,28 +104,56 @@ public class DataManager {
         }
     }
 
-    public static void givePoints() {
-        for (Guess g:currentFixture.getGuesses()){
-            DatabaseReference ref = db.getReference("users");
-            int points = 0;
-            for (int i = 0; i < FIXTURE_SIZE; i++) {
-                Match current = g.getFixtureScores().get(i);
-                points += calcPts(currentFixture.getMatches().get(i),current.getScore1(),current.getScore2());
+    public static void setUserToDB(User user, String uid){
+        DatabaseReference ref = db.getReference("users").child(uid);
+        ref.setValue(user);
+    }
+
+    public static User loadUserFromDB(String uid){
+        final User[] user = new User[1];
+        DatabaseReference ref = db.getReference("users").child(uid);
+        ref.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                user[0] = snapshot.getValue(User.class);
+                Log.d("user",user[0].toString());
             }
-            int fixturePoints = points;
-            ref.addListenerForSingleValueEvent(new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot snapshot) {
-                    HashMap<String,User> users = snapshot.getValue(HashMap.class);
-                    users.get(g.getUser()).incScore(fixturePoints);
-                }
 
-                @Override
-                public void onCancelled(@NonNull DatabaseError error) {
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
 
+            }
+        });
+        return user[0];
+    }
+
+    public static void givePoints() {
+        DatabaseReference guessRef = db.getReference("fixture").child("guesses");
+        guessRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for (DataSnapshot ds: snapshot.getChildren()) {
+                    Guess g = ds.getValue(Guess.class);
+                    User user = loadUserFromDB(g.getUser());
+                    user.incScore(calcPtsFromGuess(g));
+                    setUserToDB(user,g.getUser());
                 }
-            });
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
+
+    private static int calcPtsFromGuess(Guess g) {
+        int points = 0;
+        for (int i = 0; i < FIXTURE_SIZE; i++) {
+            Score current = g.getFixtureScores().get(i);
+            points += calcPts(currentFixture.getMatches().get(i),current.getS1(),current.getS2());
         }
+        return points;
     }
 
     public static int randScore(){

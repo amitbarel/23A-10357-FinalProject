@@ -3,7 +3,7 @@ package com.amitb.a23a_10357_soccerwager.Utils;
 import java.util.ArrayList;
 
 public class Guess {
-    private ArrayList<Match> fixtureScores;
+    private ArrayList<Score> fixtureScores;
     private String user;
 
 
@@ -12,7 +12,7 @@ public class Guess {
     }
 
     public void addScore(int pos, int s1, int s2){
-        fixtureScores.add(pos,new Match().setScore1(s1).setScore2(s2));
+        fixtureScores.add(pos,new Score().setS1(s1).setS2(s2));
     }
 
     public Guess setUser(String user) {
@@ -20,7 +20,7 @@ public class Guess {
         return this;
     }
 
-    public ArrayList<Match> getFixtureScores() {
+    public ArrayList<Score> getFixtureScores() {
         return fixtureScores;
     }
 
