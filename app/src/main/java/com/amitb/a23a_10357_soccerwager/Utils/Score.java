@@ -1,7 +1,7 @@
 package com.amitb.a23a_10357_soccerwager.Utils;
 
 public class Score {
-    private int s1,s2;
+    private int s1=0,s2=0;
 
     public Score() {
     }

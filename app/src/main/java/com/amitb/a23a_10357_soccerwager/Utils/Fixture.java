@@ -1,25 +1,26 @@
 package com.amitb.a23a_10357_soccerwager.Utils;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class Fixture {
-    List<Guess> guesses;
-    List<Match> matches;
+    ArrayList<Guess> guesses;
+    ArrayList<Match> matches;
 
     public Fixture() {
     }
 
-    public List<Guess> getGuesses() {
+    public ArrayList<Guess> getGuesses() {
         return guesses;
     }
 
-    public Fixture setGuesses(List<Guess> guesses) {
+    public Fixture setGuesses(ArrayList<Guess> guesses) {
         this.guesses = guesses;
         return this;
     }
 
-    public List<Match> getMatches() {
+    public ArrayList<Match> getMatches() {
         return matches;
     }
 
@@ -28,5 +29,11 @@ public class Fixture {
         return this;
     }
 
-
+    @Override
+    public String toString() {
+        return "Fixture{" +
+                "guesses=" + guesses +
+                ", matches=" + matches +
+                '}';
+    }
 }

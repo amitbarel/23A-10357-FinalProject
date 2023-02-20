@@ -16,6 +16,9 @@ import com.amitb.a23a_10357_soccerwager.Interfaces.CallBack_logout;
 import com.amitb.a23a_10357_soccerwager.Interfaces.OnGetDataListener;
 import com.amitb.a23a_10357_soccerwager.R;
 import com.amitb.a23a_10357_soccerwager.Utils.DataManager;
+import com.amitb.a23a_10357_soccerwager.Utils.Fixture;
+import com.amitb.a23a_10357_soccerwager.Utils.Guess;
+import com.amitb.a23a_10357_soccerwager.Utils.Match;
 import com.amitb.a23a_10357_soccerwager.Utils.Score;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -23,6 +26,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class ProfileFragment extends Fragment {
 
@@ -70,8 +74,36 @@ public class ProfileFragment extends Fragment {
     }
 
     private void generateFixture() {
-        ArrayList<Score> scores = DataManager.loadScoresFromDB();
-        Log.d("onSuccess",scores.toString());
+        DataManager.readData(FirebaseDatabase.getInstance().getReference("fixture"), new OnGetDataListener() {
+            @Override
+            public void onSuccess(DataSnapshot dataSnapshot) {
+                //what to do if finished
+                DataManager.loadFixture(dataSnapshot);
+                Fixture fixture = DataManager.getFixture();
+                Log.d("onSuccess: ",fixture.toString());
+                //DataManager.handleScores();
+                ArrayList<Match> realScores = fixture.getMatches();
+                ArrayList<Guess> guesses = fixture.getGuesses();
+                HashMap<String,Integer> uidAndPoints = new HashMap<>();
+                for(Guess guess: guesses){
+                    String uid = guess.getUser();
+                    int points = DataManager.calcPtsFromGuess(guess);
+                    Log.d("onSuccess: ",points+"");
+                    uidAndPoints.put(uid,points);
+                }
+            }
+
+            @Override
+            public void onStart() {
+
+            }
+
+            @Override
+            public void onFailure() {
+
+            }
+        });
+        //Log.d("onSuccess",scores.toString());
 //        if (DataManager.getFixture() == null || DataManager.getFixture().getGuesses() == null){
 //            DataManager.createFixture();
 //            Log.d("onSuccess","if");

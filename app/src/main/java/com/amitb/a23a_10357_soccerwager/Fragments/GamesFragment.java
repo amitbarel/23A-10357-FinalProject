@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -44,6 +45,7 @@ public class GamesFragment extends Fragment {
             public void onSuccess(DataSnapshot dataSnapshot) {
                 DataManager.loadFixture(dataSnapshot);
                 Fixture fixture = DataManager.getFixture();
+                Log.d("onSuccess: ",fixture.toString());
                 ArrayList<Match> lstMatches = (ArrayList<Match>) fixture.getMatches();
                 matchAdapter = new MatchAdapter(getContext(),lstMatches);
                 matches.setLayoutManager(new LinearLayoutManager(getContext()));

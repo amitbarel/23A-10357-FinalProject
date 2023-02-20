@@ -9,10 +9,12 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.GenericTypeIndicator;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 
 public class DataManager {
 
@@ -72,7 +74,15 @@ public class DataManager {
     }
 
     public static void loadFixture(DataSnapshot snapshot){
-        currentFixture = snapshot.getValue(Fixture.class);
+        ArrayList<Guess> guesses = new ArrayList<>();
+        ArrayList<Match> matches = new ArrayList<>();
+        for(DataSnapshot db:snapshot.child("guesses").getChildren()){
+            guesses.add(db.getValue(Guess.class));
+        }
+        for(DataSnapshot db:snapshot.child("matches").getChildren()){
+            matches.add(db.getValue(Match.class));
+        }
+        currentFixture = new Fixture().setGuesses(guesses).setMatches(matches);
     }
 
     public static void createFixture(){
@@ -86,7 +96,7 @@ public class DataManager {
             m.setScore2(randScore());
             allMatches.add(m);
         }
-        fixture.setMatches(allMatches);
+        //fixture.setMatches(allMatches);
         DatabaseReference ref = db.getReference("fixture");
         ref.setValue(fixture);
     }
@@ -207,7 +217,7 @@ public class DataManager {
 //        });
     }
 
-    private static int calcPtsFromGuess(Guess g) {
+    public static int calcPtsFromGuess(Guess g) {
         int points = 0;
         for (int i = 0; i < FIXTURE_SIZE; i++) {
             Score current = g.getFixtureScores().get(i);
@@ -225,7 +235,7 @@ public class DataManager {
     public static int calcPts(Match match, int s1, int s2){
         if (match.getScore1() == s1 && match.getScore2() == s2)
             return 3;
-        else if(s1>s2 && match.getScore1()> match.getScore2() || s1<s2 && match.getScore1()< match.getScore2()){
+        else if((s1>s2 && match.getScore1()> match.getScore2()) || (s1<s2 && match.getScore1()< match.getScore2())){
             return 1;
         }
         return 0;
