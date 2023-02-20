@@ -20,6 +20,7 @@ import com.amitb.a23a_10357_soccerwager.Utils.Fixture;
 import com.amitb.a23a_10357_soccerwager.Utils.Guess;
 import com.amitb.a23a_10357_soccerwager.Utils.Match;
 import com.amitb.a23a_10357_soccerwager.Utils.Score;
+import com.amitb.a23a_10357_soccerwager.Utils.User;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
@@ -81,16 +82,36 @@ public class ProfileFragment extends Fragment {
                 DataManager.loadFixture(dataSnapshot);
                 Fixture fixture = DataManager.getFixture();
                 Log.d("onSuccess: ",fixture.toString());
-                //DataManager.handleScores();
-                ArrayList<Match> realScores = fixture.getMatches();
                 ArrayList<Guess> guesses = fixture.getGuesses();
                 HashMap<String,Integer> uidAndPoints = new HashMap<>();
                 for(Guess guess: guesses){
                     String uid = guess.getUser();
                     int points = DataManager.calcPtsFromGuess(guess);
-                    Log.d("onSuccess: ",points+"");
                     uidAndPoints.put(uid,points);
                 }
+                FirebaseDatabase db = FirebaseDatabase.getInstance();
+                DataManager.readData(db.getReference("users"), new OnGetDataListener() {
+                    @Override
+                    public void onSuccess(DataSnapshot dataSnapshot) {
+                        for (DataSnapshot userSnap: dataSnapshot.getChildren()) {
+                            User user = userSnap.getValue(User.class);
+                            String uid = userSnap.getKey();
+                            user.incScore(uidAndPoints.get(uid));
+                            db.getReference("users").child(uid).setValue(user);
+                        }
+                    }
+
+                    @Override
+                    public void onStart() {
+
+                    }
+
+                    @Override
+                    public void onFailure() {
+
+                    }
+                });
+                DataManager.createFixture();
             }
 
             @Override
@@ -103,17 +124,6 @@ public class ProfileFragment extends Fragment {
 
             }
         });
-        //Log.d("onSuccess",scores.toString());
-//        if (DataManager.getFixture() == null || DataManager.getFixture().getGuesses() == null){
-//            DataManager.createFixture();
-//            Log.d("onSuccess","if");
-//        }
-//        else{
-////            DataManager.fillFixture(); // Give scores to the current fixture
-//            DataManager.givePoints(); // Give points
-//            DataManager.createFixture();
-//            Log.d("onSuccess","else");
-//        }
     }
 
     private void btnClicked() {

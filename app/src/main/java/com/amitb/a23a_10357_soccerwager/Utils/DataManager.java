@@ -96,7 +96,7 @@ public class DataManager {
             m.setScore2(randScore());
             allMatches.add(m);
         }
-        //fixture.setMatches(allMatches);
+        fixture.setMatches(allMatches);
         DatabaseReference ref = db.getReference("fixture");
         ref.setValue(fixture);
     }
@@ -107,115 +107,6 @@ public class DataManager {
         ref.setValue(user);
     }
 
-
-//    public static User loadUserFromDB(String uid, OnGetDataListener listener){
-//        final User[] user = new User[1];
-//        DatabaseReference ref = db.getReference("users").child(uid);
-//        ref.addListenerForSingleValueEvent(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(@NonNull DataSnapshot snapshot) {
-//                user[0] = snapshot.getValue(User.class);
-//                listener.onSuccess(snapshot);
-//            }
-//
-//            @Override
-//            public void onCancelled(@NonNull DatabaseError error) {
-//
-//            }
-//        });
-//        return user[0];
-//    }
-
-    public static void handleScores(){
-        ArrayList<Score> scores = new ArrayList<>();
-        DatabaseReference fixtureRef = db.getReference("fixture");
-        fixtureRef.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                DataSnapshot matchesSnap = snapshot.child("matches");
-                for (DataSnapshot ds:matchesSnap.getChildren()) {
-                    Log.d("onDataChange: ",ds.getKey());
-                    Match m = ds.getValue(Match.class);
-                    Score score = new Score().setS1(m.getScore1()).setS2(m.getScore2());
-                    scores.add(score);
-                }
-                DataSnapshot guessesSnap = snapshot.child("guesses");
-                for (DataSnapshot ds:guessesSnap.getChildren()) {
-                    int points = calcPtsFromGuess(ds.getValue(Guess.class));
-                    Log.d("onDataChange",points+"");
-                }
-            }
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });
-    }
-
-    public static void givePoints() {
-        DatabaseReference usersRef = db.getReference("users");
-        usersRef.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                for (DataSnapshot ds: snapshot.getChildren()) {
-                    User user = ds.getValue(User.class);
-                    String uid = ds.getKey();
-                    DatabaseReference guessRef = db.getReference("fixture").child("guesses");
-                    guessRef.get().addOnCompleteListener(event->{
-                        if (event.isSuccessful()){
-                            Guess userGuess = event.getResult().child(uid).getValue(Guess.class);
-                            Log.d("onSuccess",userGuess.toString());
-                        }
-                    });
-
-//                    for (Guess g: currentFixture.getGuesses()) {
-//                        if (g.getUser() == uid)
-//                            userGuess = g;
-//                    }
-//                    user.incScore(calcPtsFromGuess(userGuess));
-//                    setUserToDB(user,uid);
-                }
-            }
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });
-
-//        DatabaseReference guessRef = db.getReference("fixture").child("guesses");
-//        guessRef.addListenerForSingleValueEvent(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(@NonNull DataSnapshot snapshot) {
-//                for (DataSnapshot ds: snapshot.getChildren()) {
-//                    Guess g = ds.getValue(Guess.class);
-//                    User user = loadUserFromDB(g.getUser(), new OnGetDataListener() {
-//                        @Override
-//                        public void onSuccess(DataSnapshot dataSnapshot) {
-//
-//                        }
-//
-//                        @Override
-//                        public void onStart() {
-//
-//                        }
-//
-//                        @Override
-//                        public void onFailure() {
-//
-//                        }
-//                    });
-//                    user.incScore(calcPtsFromGuess(g));
-//                    Log.d("onSuccess",calcPtsFromGuess(g) + "");
-//                    setUserToDB(user,g.getUser());
-//                }
-//            }
-//
-//            @Override
-//            public void onCancelled(@NonNull DatabaseError error) {
-//
-//            }
-//        });
-    }
 
     public static int calcPtsFromGuess(Guess g) {
         int points = 0;
@@ -235,7 +126,10 @@ public class DataManager {
     public static int calcPts(Match match, int s1, int s2){
         if (match.getScore1() == s1 && match.getScore2() == s2)
             return 3;
-        else if((s1>s2 && match.getScore1()> match.getScore2()) || (s1<s2 && match.getScore1()< match.getScore2())){
+        else if((s1>s2 && (match.getScore1() > match.getScore2())) || (s1<s2 && (match.getScore1()< match.getScore2()))){
+            return 1;
+        }
+        else if (s1 == s2 && match.getScore1() == match.getScore2()){
             return 1;
         }
         return 0;

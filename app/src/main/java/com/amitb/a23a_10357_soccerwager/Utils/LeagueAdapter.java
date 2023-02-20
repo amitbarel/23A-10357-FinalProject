@@ -39,7 +39,7 @@ public class LeagueAdapter extends RecyclerView.Adapter<LeagueAdapter.LeagueView
     @NonNull
     @Override
     public LeagueViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.ranking_item,parent,false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.table_item,parent,false);
         return new LeagueViewHolder(view);
     }
 

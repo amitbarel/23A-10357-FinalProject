@@ -32,7 +32,6 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Map;
-import java.util.concurrent.atomic.AtomicReference;
 
 
 public class HomeFragment extends Fragment {
@@ -82,6 +81,8 @@ public class HomeFragment extends Fragment {
         ref.get().addOnCompleteListener(event->{
            if (event.isSuccessful()){
                currentUser = event.getResult().getValue(User.class);
+               DataSnapshot pointsSnap = event.getResult().child("score");
+               points.setText(pointsSnap.getValue(Integer.class) + "");
                DatabaseReference leaguesRef = FirebaseDatabase.getInstance().getReference("leagues");
                leaguesRef.addListenerForSingleValueEvent(new ValueEventListener() {
                    @Override
