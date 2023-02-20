@@ -108,15 +108,6 @@
             android:gravity="center"
             android:text="League Name"/>
 
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:background="@drawable/item_border"
-            android:textColor="@color/white"
-            android:gravity="center"
-            android:text="Users"/>
-
     </LinearLayout>
 
     <androidx.recyclerview.widget.RecyclerView

@@ -97,14 +97,6 @@
                     android:textColor="@color/white" />
 
 
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:background="@drawable/item_border"
-                    android:gravity="center"
-                    android:text="Place"
-                    android:textColor="@color/white" />
 
             </LinearLayout>
 
@@ -138,7 +130,7 @@
             <androidx.appcompat.widget.AppCompatEditText
                 android:id="@+id/ET_league"
                 android:layout_width="match_parent"
-                android:inputType="textPassword"
+                android:inputType="text"
                 android:layout_height="wrap_content" />
 
             <androidx.appcompat.widget.AppCompatButton

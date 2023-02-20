@@ -5,15 +5,12 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 
 import com.amitb.a23a_10357_soccerwager.Interfaces.OnGetDataListener;
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.GenericTypeIndicator;
 import com.google.firebase.database.ValueEventListener;
 
-import java.lang.ref.Reference;
 import java.util.ArrayList;
 import java.util.Collections;
 
@@ -21,6 +18,7 @@ public class DataManager {
 
     private final static int FIXTURE_SIZE = 7;
     private static ArrayList<Team> teams = new ArrayList<>();
+    private static ArrayList<League> leauges = new ArrayList<>();
     private static FirebaseDatabase db = FirebaseDatabase.getInstance();
     private static Fixture currentFixture;
     private static String adminId;
@@ -74,77 +72,139 @@ public class DataManager {
     }
 
     public static void loadFixture(DataSnapshot snapshot){
-        Log.d("loadFixture: ",snapshot.getKey());
-//        GenericTypeIndicator<ArrayList<Guess>> t1 = new GenericTypeIndicator<ArrayList<Guess>>() {};
-//        ArrayList<Guess> guesses = snapshot.child("guesses").getValue(t1);
-//        GenericTypeIndicator<ArrayList<Match>> t2 = new GenericTypeIndicator<ArrayList<Match>>() {};
-//        ArrayList<Match> matches = snapshot.child("matches").getValue(t2);
-//        currentFixture = new Fixture().setGuesses(guesses).setMatches(matches);
-//        currentFixture = snapshot.getValue(Fixture.class);
         currentFixture = snapshot.getValue(Fixture.class);
-        Log.d("loadFixture: ",currentFixture.toString());
-    };
+    }
 
     public static void createFixture(){
         ArrayList<Team> temp = teams;
         Collections.shuffle(temp);
+        Fixture fixture = new Fixture();
+        ArrayList<Match> allMatches = new ArrayList<>();
         for (int i = 0; i < teams.size(); i+=2) {
             Match m = new Match().setTeam1(temp.get(i)).setTeam2(temp.get(i+1));
-            currentFixture.getMatches().add(m);
-        }
-        DatabaseReference ref = db.getReference("fixture");
-        ref.setValue(currentFixture);
-    }
-
-
-    public static void fillFixture() {
-        for (Match m:currentFixture.getMatches()) {
             m.setScore1(randScore());
             m.setScore2(randScore());
+            allMatches.add(m);
         }
+        fixture.setMatches(allMatches);
+        DatabaseReference ref = db.getReference("fixture");
+        ref.setValue(fixture);
     }
+
 
     public static void setUserToDB(User user, String uid){
         DatabaseReference ref = db.getReference("users").child(uid);
         ref.setValue(user);
     }
 
-    public static User loadUserFromDB(String uid){
-        final User[] user = new User[1];
-        DatabaseReference ref = db.getReference("users").child(uid);
-        ref.addListenerForSingleValueEvent(new ValueEventListener() {
+
+//    public static User loadUserFromDB(String uid, OnGetDataListener listener){
+//        final User[] user = new User[1];
+//        DatabaseReference ref = db.getReference("users").child(uid);
+//        ref.addListenerForSingleValueEvent(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(@NonNull DataSnapshot snapshot) {
+//                user[0] = snapshot.getValue(User.class);
+//                listener.onSuccess(snapshot);
+//            }
+//
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError error) {
+//
+//            }
+//        });
+//        return user[0];
+//    }
+
+    public static void handleScores(){
+        ArrayList<Score> scores = new ArrayList<>();
+        DatabaseReference fixtureRef = db.getReference("fixture");
+        fixtureRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                user[0] = snapshot.getValue(User.class);
-                Log.d("user",user[0].toString());
+                DataSnapshot matchesSnap = snapshot.child("matches");
+                for (DataSnapshot ds:matchesSnap.getChildren()) {
+                    Log.d("onDataChange: ",ds.getKey());
+                    Match m = ds.getValue(Match.class);
+                    Score score = new Score().setS1(m.getScore1()).setS2(m.getScore2());
+                    scores.add(score);
+                }
+                DataSnapshot guessesSnap = snapshot.child("guesses");
+                for (DataSnapshot ds:guessesSnap.getChildren()) {
+                    int points = calcPtsFromGuess(ds.getValue(Guess.class));
+                    Log.d("onDataChange",points+"");
+                }
             }
-
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
 
             }
         });
-        return user[0];
     }
 
     public static void givePoints() {
-        DatabaseReference guessRef = db.getReference("fixture").child("guesses");
-        guessRef.addListenerForSingleValueEvent(new ValueEventListener() {
+        DatabaseReference usersRef = db.getReference("users");
+        usersRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 for (DataSnapshot ds: snapshot.getChildren()) {
-                    Guess g = ds.getValue(Guess.class);
-                    User user = loadUserFromDB(g.getUser());
-                    user.incScore(calcPtsFromGuess(g));
-                    setUserToDB(user,g.getUser());
+                    User user = ds.getValue(User.class);
+                    String uid = ds.getKey();
+                    DatabaseReference guessRef = db.getReference("fixture").child("guesses");
+                    guessRef.get().addOnCompleteListener(event->{
+                        if (event.isSuccessful()){
+                            Guess userGuess = event.getResult().child(uid).getValue(Guess.class);
+                            Log.d("onSuccess",userGuess.toString());
+                        }
+                    });
+
+//                    for (Guess g: currentFixture.getGuesses()) {
+//                        if (g.getUser() == uid)
+//                            userGuess = g;
+//                    }
+//                    user.incScore(calcPtsFromGuess(userGuess));
+//                    setUserToDB(user,uid);
                 }
             }
-
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
 
             }
         });
+
+//        DatabaseReference guessRef = db.getReference("fixture").child("guesses");
+//        guessRef.addListenerForSingleValueEvent(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(@NonNull DataSnapshot snapshot) {
+//                for (DataSnapshot ds: snapshot.getChildren()) {
+//                    Guess g = ds.getValue(Guess.class);
+//                    User user = loadUserFromDB(g.getUser(), new OnGetDataListener() {
+//                        @Override
+//                        public void onSuccess(DataSnapshot dataSnapshot) {
+//
+//                        }
+//
+//                        @Override
+//                        public void onStart() {
+//
+//                        }
+//
+//                        @Override
+//                        public void onFailure() {
+//
+//                        }
+//                    });
+//                    user.incScore(calcPtsFromGuess(g));
+//                    Log.d("onSuccess",calcPtsFromGuess(g) + "");
+//                    setUserToDB(user,g.getUser());
+//                }
+//            }
+//
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError error) {
+//
+//            }
+//        });
     }
 
     private static int calcPtsFromGuess(Guess g) {
@@ -158,7 +218,7 @@ public class DataManager {
 
     public static int randScore(){
         int min = 0;
-        int max = 3;
+        int max = 4;
         return (int)(Math.random() * ((max-min)+1));
     }
 
@@ -170,4 +230,6 @@ public class DataManager {
         }
         return 0;
     }
+
+
 }

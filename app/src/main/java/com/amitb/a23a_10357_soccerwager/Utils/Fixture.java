@@ -1,24 +1,25 @@
 package com.amitb.a23a_10357_soccerwager.Utils;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class Fixture {
-    ArrayList<Guess> guesses;
-    ArrayList<Match> matches;
+    List<Guess> guesses;
+    List<Match> matches;
 
     public Fixture() {
     }
 
-    public ArrayList<Guess> getGuesses() {
+    public List<Guess> getGuesses() {
         return guesses;
     }
 
-    public Fixture setGuesses(ArrayList<Guess> guesses) {
+    public Fixture setGuesses(List<Guess> guesses) {
         this.guesses = guesses;
         return this;
     }
 
-    public ArrayList<Match> getMatches() {
+    public List<Match> getMatches() {
         return matches;
     }
 

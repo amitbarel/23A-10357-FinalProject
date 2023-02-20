@@ -16,10 +16,13 @@ import com.amitb.a23a_10357_soccerwager.Interfaces.CallBack_logout;
 import com.amitb.a23a_10357_soccerwager.Interfaces.OnGetDataListener;
 import com.amitb.a23a_10357_soccerwager.R;
 import com.amitb.a23a_10357_soccerwager.Utils.DataManager;
+import com.amitb.a23a_10357_soccerwager.Utils.Score;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+
+import java.util.ArrayList;
 
 public class ProfileFragment extends Fragment {
 
@@ -38,7 +41,6 @@ public class ProfileFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_profile, container, false);
         mAuth = FirebaseAuth.getInstance();
-        Toast.makeText(getContext(),mAuth.getCurrentUser().getUid(),Toast.LENGTH_SHORT);
         findViews();
         name.setText(mAuth.getCurrentUser().getDisplayName());
         email.setText(mAuth.getCurrentUser().getEmail());
@@ -48,9 +50,7 @@ public class ProfileFragment extends Fragment {
         DataManager.readData(FirebaseDatabase.getInstance().getReference("admin"), new OnGetDataListener() {
             @Override
             public void onSuccess(DataSnapshot dataSnapshot) {
-                Log.d("Answer","checking");
                 if (DataManager.isAdmin(dataSnapshot,uid)){
-                    Log.d("Answer","is admin");
                     genFrame.setVisibility(View.VISIBLE);
                 }
             }
@@ -70,16 +70,17 @@ public class ProfileFragment extends Fragment {
     }
 
     private void generateFixture() {
-        DataManager.createFixture();
-
-//        if (mAuth.getCurrentUser().getUid().equals(DataManager.getAdminId())){
-//            DataManager.fillFixture(); // Give scores to the current fixture
-//            DataManager.givePoints(); // Give points
+        ArrayList<Score> scores = DataManager.loadScoresFromDB();
+        Log.d("onSuccess",scores.toString());
+//        if (DataManager.getFixture() == null || DataManager.getFixture().getGuesses() == null){
 //            DataManager.createFixture();
-//            Toast.makeText(getContext(),"Fixture updated",Toast.LENGTH_SHORT);
+//            Log.d("onSuccess","if");
 //        }
 //        else{
-//            Toast.makeText(getContext(),"You are not the admin!",Toast.LENGTH_SHORT);
+////            DataManager.fillFixture(); // Give scores to the current fixture
+//            DataManager.givePoints(); // Give points
+//            DataManager.createFixture();
+//            Log.d("onSuccess","else");
 //        }
     }
 

@@ -45,6 +45,15 @@ public class Match {
         return this;
     }
 
+    @Override
+    public String toString() {
+        return "Match{" +
+                "team1=" + team1.getName() +
+                ", team2=" + team2.getName() +
+                ", score1=" + score1 +
+                ", score2=" + score2 +
+                '}';
+    }
 }
 
 

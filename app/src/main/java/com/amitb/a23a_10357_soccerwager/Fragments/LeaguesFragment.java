@@ -16,6 +16,7 @@ import android.widget.Toast;
 
 import com.amitb.a23a_10357_soccerwager.R;
 import com.amitb.a23a_10357_soccerwager.Utils.League;
+import com.amitb.a23a_10357_soccerwager.Utils.RankAdapter;
 import com.amitb.a23a_10357_soccerwager.Utils.User;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -63,12 +64,14 @@ public class LeaguesFragment extends Fragment implements AdapterView.OnItemSelec
 
             }
         });
-        List<String> userLeagueNames = (List<String>)currentUser.getLeagues().keySet();
+        List<String> userLeagueNames = null;
+        for (int i = 0; i < currentUser.getLeagues().size(); i++) {
+            userLeagueNames.add(currentUser.getLeagues().get(i));
+        }
         ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, userLeagueNames);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         leagues.setAdapter(adapter);
         leagues.setOnItemSelectedListener(this);
-//        ArrayList<League> userLeagues = currentUser.getLeagues();
         return view;
     }
 

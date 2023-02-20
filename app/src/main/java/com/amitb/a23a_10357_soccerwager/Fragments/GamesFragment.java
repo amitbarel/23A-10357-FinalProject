@@ -25,6 +25,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class GamesFragment extends Fragment {
 
@@ -43,7 +44,7 @@ public class GamesFragment extends Fragment {
             public void onSuccess(DataSnapshot dataSnapshot) {
                 DataManager.loadFixture(dataSnapshot);
                 Fixture fixture = DataManager.getFixture();
-                ArrayList<Match> lstMatches = fixture.getMatches();
+                ArrayList<Match> lstMatches = (ArrayList<Match>) fixture.getMatches();
                 matchAdapter = new MatchAdapter(getContext(),lstMatches);
                 matches.setLayoutManager(new LinearLayoutManager(getContext()));
                 matches.setAdapter(matchAdapter);

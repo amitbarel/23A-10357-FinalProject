@@ -13,29 +13,24 @@ import com.amitb.a23a_10357_soccerwager.R;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class RankAdapter extends RecyclerView.Adapter<RankAdapter.RankViewHolder> {
 
     private Context context;
-    private ArrayList<User> participants;
-    private User user;
-    private FirebaseDatabase fbdb = FirebaseDatabase.getInstance();
+    private ArrayList<String> leagues;
 
-    public RankAdapter(Context context,ArrayList<User> participants,User user){
+    public RankAdapter(Context context,ArrayList<String> leagues){
         this.context = context;
-        this.participants = participants;
-        this.user = user;
+        this.leagues = leagues;
     }
 
     public class RankViewHolder extends RecyclerView.ViewHolder{
 
-        private TextView leagueName,rank;
+        private TextView leagueName;
 
         public RankViewHolder(@NonNull View itemView) {
             super(itemView);
             leagueName = itemView.findViewById(R.id.name_section);
-            rank = itemView.findViewById(R.id.points_section);
         }
     }
 
@@ -48,14 +43,12 @@ public class RankAdapter extends RecyclerView.Adapter<RankAdapter.RankViewHolder
 
     @Override
     public void onBindViewHolder(@NonNull RankViewHolder holder, int position) {
-        List <String> keys = (List<String>) user.getLeagues().keySet();
-        holder.leagueName.setText(keys.get(position));
-        holder.rank.setText(participants.indexOf(user)+1+"");
+        holder.leagueName.setText(leagues.get(position));
     }
 
     @Override
     public int getItemCount() {
-        return 0;
+        return leagues == null? 0: leagues.size();
     }
 
 
