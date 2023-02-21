@@ -20,6 +20,7 @@ public class LottieActivity extends AppCompatActivity {
         new Handler().postDelayed(() -> {
             Intent intent = new Intent(getApplicationContext(),LoginActivity.class);
             startActivity(intent);
+            finish();
         },3000);
     }
 
