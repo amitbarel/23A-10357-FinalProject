@@ -26,12 +26,12 @@ public class LeagueAdapter extends RecyclerView.Adapter<LeagueAdapter.LeagueView
     }
 
     public class LeagueViewHolder extends RecyclerView.ViewHolder{
-
-        private TextView username,points;
+        private TextView spot,username,points;
 
         public LeagueViewHolder(@NonNull View itemView) {
             super(itemView);
-            username = itemView.findViewById(R.id.name_section);
+            spot = itemView.findViewById(R.id.place_section);
+            username = itemView.findViewById(R.id.teamname_section);
             points = itemView.findViewById(R.id.points_section);
         }
     }
@@ -45,9 +45,11 @@ public class LeagueAdapter extends RecyclerView.Adapter<LeagueAdapter.LeagueView
 
     @Override
     public void onBindViewHolder(@NonNull LeagueViewHolder holder, int position) {
+        users.sort((o1, o2) -> o1.getScore());
         User user = users.get(position);
+        holder.spot.setText((users.indexOf(user)+1) + "");
         holder.username.setText(user.getUsername());
-        holder.points.setText(user.getScore());
+        holder.points.setText(user.getScore() + "");
     }
 
     @Override

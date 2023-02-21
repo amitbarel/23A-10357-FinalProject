@@ -17,7 +17,6 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 
 import com.amitb.a23a_10357_soccerwager.R;
-import com.amitb.a23a_10357_soccerwager.Utils.DataManager;
 import com.amitb.a23a_10357_soccerwager.Utils.League;
 import com.amitb.a23a_10357_soccerwager.Utils.LeagueAdapter;
 import com.amitb.a23a_10357_soccerwager.Utils.RankAdapter;
@@ -48,6 +47,7 @@ public class LeaguesFragment extends Fragment implements AdapterView.OnItemSelec
     private User currentUser;
     private Collection<League> allLeagues;
     private ArrayList<String> userLeagues = new ArrayList<>();
+    private ArrayList<User> leagueParticipants = new ArrayList<>();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -87,23 +87,9 @@ public class LeaguesFragment extends Fragment implements AdapterView.OnItemSelec
                                     String value = parent.getItemAtPosition(position).toString();
                                     for (League league: allLeagues) {
                                         if (league.getLeagueName() == value){
-                                            ArrayList<User> participants = new ArrayList<>();
-                                            for (String participant: league.getParticipants()) {
-
-//                                                User user = new User();
-//                                                DatabaseReference userRef = ref.getParent().child(participant);
-//                                                userRef.get().addOnCompleteListener(event->{
-//                                                   if (event.isSuccessful()){
-//                                                       Log.d("onSuccess",event.getResult().getValue(User.class).toString());
-////                                                       user = event.getResult().getValue(User.class);
-//                                                   }
-//                                                });
-                                            }
-//                                            leagueAdapter = new LeagueAdapter(getContext(),);
+                                            loadUsersFromDB(league.getParticipants());
                                         }
                                     }
-
-                                    Log.d("onSuccess",value);
                                 }
 
                                 @Override
@@ -128,6 +114,24 @@ public class LeaguesFragment extends Fragment implements AdapterView.OnItemSelec
 
                     }
                 });
+            }
+        });
+    }
+
+    private void loadUsersFromDB(ArrayList<String> users) {
+        leagueParticipants.clear();
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference("users");
+        ref.get().addOnCompleteListener(event->{
+            if (event.isSuccessful()){
+                for (DataSnapshot ds: event.getResult().getChildren()){
+                    if (users.contains(ds.getKey())){
+                        leagueParticipants.add(ds.getValue(User.class));
+                    }
+
+                }
+                leagueAdapter = new LeagueAdapter(getContext(),leagueParticipants);
+                lst_Leagues.setLayoutManager(new LinearLayoutManager(getContext()));
+                lst_Leagues.setAdapter(leagueAdapter);
             }
         });
     }

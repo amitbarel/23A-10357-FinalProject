@@ -63,7 +63,12 @@ public class LoginActivity extends AppCompatActivity {
 
     private void onSignInResult(FirebaseAuthUIAuthenticationResult result) {
         Toast.makeText(this, "Hello " + mAuth.getCurrentUser().getDisplayName(), Toast.LENGTH_SHORT).show();
-        User user = new User(mAuth.getCurrentUser().getDisplayName(),mAuth.getCurrentUser().getEmail());
+        User user = null;
+        if (mAuth.getCurrentUser().getPhoneNumber() == null)
+            user = new User(mAuth.getCurrentUser().getDisplayName(),mAuth.getCurrentUser().getEmail());
+        else if (mAuth.getCurrentUser().getEmail() == null){
+            user = new User(mAuth.getCurrentUser().getDisplayName(),mAuth.getCurrentUser().getPhoneNumber());
+        }
         mDatabase.child("users").child(mAuth.getCurrentUser().getUid()).setValue(user);
         goToMain();
     }

@@ -48,7 +48,8 @@ public class ProfileFragment extends Fragment {
         mAuth = FirebaseAuth.getInstance();
         findViews();
         name.setText(mAuth.getCurrentUser().getDisplayName());
-        email.setText(mAuth.getCurrentUser().getEmail());
+        if (mAuth.getCurrentUser().getEmail() != null)
+            email.setText(mAuth.getCurrentUser().getEmail());
         String uid = mAuth.getCurrentUser().getUid();
         Log.d("onCreateView: ",uid);
         logout.setOnClickListener(v->btnClicked());

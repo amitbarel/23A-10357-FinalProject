@@ -10,7 +10,6 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.amitb.a23a_10357_soccerwager.R;
-import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
 
