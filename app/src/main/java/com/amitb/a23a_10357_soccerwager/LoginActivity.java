@@ -41,7 +41,6 @@ public class LoginActivity extends AppCompatActivity {
             String phone = user.getPhoneNumber();
             String name = user.getDisplayName();
             String email = user.getEmail();
-            int x= 0;
             goToMain();
         }
 
