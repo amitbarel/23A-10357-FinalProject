@@ -46,7 +46,6 @@ public class GamesFragment extends Fragment {
             public void onSuccess(DataSnapshot dataSnapshot) {
                 DataManager.loadFixture(dataSnapshot);
                 Fixture fixture = DataManager.getFixture();
-                Log.d("onSuccess: ",fixture.toString());
                 ArrayList<Match> lstMatches = (ArrayList<Match>) fixture.getMatches();
                 matchAdapter = new MatchAdapter(getContext(),lstMatches);
                 matches.setLayoutManager(new LinearLayoutManager(getContext()));

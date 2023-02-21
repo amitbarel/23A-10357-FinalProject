@@ -2,13 +2,8 @@ package com.amitb.a23a_10357_soccerwager;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
-import android.widget.Toast;
-
-import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.appcompat.app.AppCompatActivity;
-
 import com.amitb.a23a_10357_soccerwager.Interfaces.OnGetDataListener;
 import com.amitb.a23a_10357_soccerwager.Utils.DataManager;
 import com.amitb.a23a_10357_soccerwager.Utils.User;
@@ -28,7 +23,6 @@ public class LoginActivity extends AppCompatActivity {
 
     private FirebaseAuth mAuth;
     private DatabaseReference mDatabase;
-// ...
 
 
     @Override
@@ -72,7 +66,6 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onSuccess(DataSnapshot dataSnapshot) {
                 if (dataSnapshot.child(mAuth.getCurrentUser().getUid()).getValue(User.class) == null){
-                    Log.d("onSuccess","kaki");
                     User user = null;
                     if (mAuth.getCurrentUser().getPhoneNumber() == null)
                         user = new User(mAuth.getCurrentUser().getDisplayName(),mAuth.getCurrentUser().getEmail());
@@ -81,7 +74,6 @@ public class LoginActivity extends AppCompatActivity {
                     }
                     ref.child(mAuth.getCurrentUser().getUid()).setValue(user);
                 }
-                Log.d("onSuccess",mAuth.getCurrentUser().getUid());
                 goToMain();
             }
 
