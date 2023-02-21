@@ -51,7 +51,6 @@ public class ProfileFragment extends Fragment {
         if (mAuth.getCurrentUser().getEmail() != null)
             email.setText(mAuth.getCurrentUser().getEmail());
         String uid = mAuth.getCurrentUser().getUid();
-        Log.d("onCreateView: ",uid);
         logout.setOnClickListener(v->btnClicked());
         DataManager.readData(FirebaseDatabase.getInstance().getReference("admin"), new OnGetDataListener() {
             @Override
@@ -63,7 +62,7 @@ public class ProfileFragment extends Fragment {
 
             @Override
             public void onStart() {
-                Log.d("onStart: ","started");
+
             }
 
             @Override
@@ -82,7 +81,6 @@ public class ProfileFragment extends Fragment {
                 //what to do if finished
                 DataManager.loadFixture(dataSnapshot);
                 Fixture fixture = DataManager.getFixture();
-                Log.d("onSuccess: ",fixture.toString());
                 ArrayList<Guess> guesses = fixture.getGuesses();
                 HashMap<String,Integer> uidAndPoints = new HashMap<>();
                 for(Guess guess: guesses){
@@ -91,14 +89,17 @@ public class ProfileFragment extends Fragment {
                     uidAndPoints.put(uid,points);
                 }
                 FirebaseDatabase db = FirebaseDatabase.getInstance();
+                DatabaseReference guessersRef = db.getReference();
                 DataManager.readData(db.getReference("users"), new OnGetDataListener() {
                     @Override
                     public void onSuccess(DataSnapshot dataSnapshot) {
                         for (DataSnapshot userSnap: dataSnapshot.getChildren()) {
                             User user = userSnap.getValue(User.class);
                             String uid = userSnap.getKey();
-                            user.incScore(uidAndPoints.get(uid));
-                            db.getReference("users").child(uid).setValue(user);
+                            if (uidAndPoints.keySet().contains(uid)){
+                                user.incScore(uidAndPoints.get(uid));
+                                db.getReference("users").child(uid).setValue(user);
+                            }
                         }
                     }
 

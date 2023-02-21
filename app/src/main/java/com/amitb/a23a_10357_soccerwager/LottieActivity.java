@@ -1,6 +1,5 @@
 package com.amitb.a23a_10357_soccerwager;
 
-import android.animation.Animator;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;

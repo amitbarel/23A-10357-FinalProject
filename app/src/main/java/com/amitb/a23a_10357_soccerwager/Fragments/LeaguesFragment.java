@@ -11,11 +11,13 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 
+import com.amitb.a23a_10357_soccerwager.Interfaces.LeagueCallBack;
 import com.amitb.a23a_10357_soccerwager.R;
 import com.amitb.a23a_10357_soccerwager.Utils.League;
 import com.amitb.a23a_10357_soccerwager.Utils.LeagueAdapter;
@@ -42,6 +44,7 @@ public class LeaguesFragment extends Fragment implements AdapterView.OnItemSelec
     private AppCompatButton btnJoin;
     private RankAdapter rankAdapter;
     private LeagueAdapter leagueAdapter;
+    private String leagueClicked;
     private FirebaseAuth mAuth;
     private FirebaseDatabase db;
     private User currentUser;
@@ -106,6 +109,11 @@ public class LeaguesFragment extends Fragment implements AdapterView.OnItemSelec
                         rankAdapter = new RankAdapter(getContext(), freeLeagues);
                         joinLeagues.setLayoutManager(new LinearLayoutManager(getContext()));
                         joinLeagues.setAdapter(rankAdapter);
+                        rankAdapter.setLeagueCallBack((league, position) -> {
+                            btnJoin.setEnabled(true);
+                            btnJoin.setOnClickListener(v->joinLeague(league));
+                        });
+
                     }
 
 
@@ -116,6 +124,22 @@ public class LeaguesFragment extends Fragment implements AdapterView.OnItemSelec
                 });
             }
         });
+    }
+
+    private void joinLeague(String leagueClicked) {
+        String uid = mAuth.getCurrentUser().getUid();
+        String leagueId = null;
+        for (League league:allLeagues) {
+            if (league.getLeagueName() == leagueClicked){
+                leagueId = league.getUuid();
+                league.addParticipants(uid);
+                db.getReference("leagues").child(leagueId).setValue(league);
+            }
+        }
+        currentUser.getLeagues().add(leagueId);
+        db.getReference("users").child(uid).setValue(currentUser);
+
+
     }
 
     private void loadUsersFromDB(ArrayList<String> users) {

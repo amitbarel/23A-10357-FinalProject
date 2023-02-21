@@ -12,6 +12,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.amitb.a23a_10357_soccerwager.Interfaces.OnGetDataListener;
 import com.amitb.a23a_10357_soccerwager.R;
@@ -72,6 +73,7 @@ public class GamesFragment extends Fragment {
             int score2 = Integer.parseInt(s2.getText().toString());
             myGuess.addScore(i,score1,score2);
         }
+        Toast.makeText(getContext(),"Guess Received",Toast.LENGTH_SHORT);
         FirebaseDatabase db = FirebaseDatabase.getInstance();
         DatabaseReference ref = db.getReference("fixture").child("guesses").child(uid);
         ref.setValue(myGuess);

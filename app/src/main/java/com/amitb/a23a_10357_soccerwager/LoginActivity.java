@@ -2,18 +2,22 @@ package com.amitb.a23a_10357_soccerwager;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.amitb.a23a_10357_soccerwager.Interfaces.OnGetDataListener;
+import com.amitb.a23a_10357_soccerwager.Utils.DataManager;
 import com.amitb.a23a_10357_soccerwager.Utils.User;
 import com.firebase.ui.auth.AuthUI;
 import com.firebase.ui.auth.FirebaseAuthUIActivityResultContract;
 import com.firebase.ui.auth.data.model.FirebaseAuthUIAuthenticationResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -62,15 +66,35 @@ public class LoginActivity extends AppCompatActivity {
     );
 
     private void onSignInResult(FirebaseAuthUIAuthenticationResult result) {
-        Toast.makeText(this, "Hello " + mAuth.getCurrentUser().getDisplayName(), Toast.LENGTH_SHORT).show();
-        User user = null;
-        if (mAuth.getCurrentUser().getPhoneNumber() == null)
-            user = new User(mAuth.getCurrentUser().getDisplayName(),mAuth.getCurrentUser().getEmail());
-        else if (mAuth.getCurrentUser().getEmail() == null){
-            user = new User(mAuth.getCurrentUser().getDisplayName(),mAuth.getCurrentUser().getPhoneNumber());
-        }
-        mDatabase.child("users").child(mAuth.getCurrentUser().getUid()).setValue(user);
-        goToMain();
+
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference("users");
+        DataManager.readData(ref, new OnGetDataListener() {
+            @Override
+            public void onSuccess(DataSnapshot dataSnapshot) {
+                if (dataSnapshot.child(mAuth.getCurrentUser().getUid()).getValue(User.class) == null){
+                    Log.d("onSuccess","kaki");
+                    User user = null;
+                    if (mAuth.getCurrentUser().getPhoneNumber() == null)
+                        user = new User(mAuth.getCurrentUser().getDisplayName(),mAuth.getCurrentUser().getEmail());
+                    else if (mAuth.getCurrentUser().getEmail() == null){
+                        user = new User(mAuth.getCurrentUser().getDisplayName(),mAuth.getCurrentUser().getPhoneNumber());
+                    }
+                    ref.child(mAuth.getCurrentUser().getUid()).setValue(user);
+                }
+                Log.d("onSuccess",mAuth.getCurrentUser().getUid());
+                goToMain();
+            }
+
+            @Override
+            public void onStart() {
+
+            }
+
+            @Override
+            public void onFailure() {
+
+            }
+        });
     }
 
 

@@ -1,8 +1,6 @@
 package com.amitb.a23a_10357_soccerwager.Utils;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
 
 public class Fixture {
     ArrayList<Guess> guesses;
