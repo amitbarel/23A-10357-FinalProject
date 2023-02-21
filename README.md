@@ -3,6 +3,8 @@ FootballWager - Waging on football matches with your friends was never easier!
 Create leagues and compete against your friends!
 Wage on israeli football matches and gain points!
 
-
+A video showing app activities
 https://user-images.githubusercontent.com/81353791/220396204-5d951db8-4d71-4d9e-ae61-4089be297f0f.mp4
 
+
+** Sending a guess while your keyboard is still floating will unfortunately cause a crash **
